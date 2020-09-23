@@ -1,7 +1,7 @@
 # append this to advanced user data options #
 !#/bin/bash
 yum update -y
-yum install glibc.i686 libstdc++.i686
+yum install glibc.i686 libstdc++.i686 -y
 useradd -m steam
 su - steam
 mkdir ~/Steam && cd ~/Steam
@@ -13,11 +13,11 @@ mkdir galaxies
 
 # run manually after instance is initialized #
 #create galaxy #
-./server.sh --galaxy-name test --admin 76561198023196598 --datapath ./galaxies
+./server.sh --galaxy-name noobgalaxy --admin {{ admin# }} --datapath ./galaxies
 /save
 /stop 
 # start server # 
-./server.sh --galaxy-name test --admin 76561198023196598 --datapath ./galaxies/ 
+./server.sh --galaxy-name noobgalaxy --admin {{ admin# }} --datapath ./galaxies/ 
 
 # Ports #
 27000 - UDP & TCP
