@@ -1,0 +1,50 @@
+# make sure to adjust ALL paths and user/group in the service file (also the ones under "Security and Sandboxing")
+
+[Unit]
+Description=Valheim dedicated server
+Wants=network-online.target
+After=syslog.target network.target nss-lookup.target network-online.target
+
+
+[Service]
+Environment="templdpath=$LD_LIBRARY_PATH"
+Environment="LD_LIBRARY_PATH=/home/steam/Steam/valheim/linux64"
+Environment="SteamAppId=892970"
+User=steam
+Group=steam
+WorkingDirectory=/home/steam/Steam/valheim/
+
+#StandardOutput=null
+
+# longer start timeout to allow steamcmd to download updates before starting the server
+TimeoutStartSec=600
+
+ExecStartPre=/home/steam/steamcmd +login anonymous +force_install_dir /home/steam/servers/valheim +app_update 896660 +quit
+
+# for different data path use -savedir path
+ExecStart=/home/steam/Steam/valheim/valheim_server.x86_64 -name "$VALHEIM_SERVER" -port "$VALHEIM_PORT" -world "$VALHEIM_WORLD" -password "$VALHEIM_PASSWORD"
+
+KillSignal=SIGINT
+
+Restart=on-failure
+RestartSec=5m
+
+
+# Security and Sandboxing
+NoNewPrivileges=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectSystem=strict
+ProtectHome=read-only
+SystemCallFilter=~@mount
+ReadWritePaths=/home/steam/servers/valheim
+ReadWritePaths=/home/steam/.config
+ReadWritePaths=/home/steam/.steam
+ReadWritePaths=/home/steam/steamcmd
+
+
+[Install]
+WantedBy=multi-user.target
