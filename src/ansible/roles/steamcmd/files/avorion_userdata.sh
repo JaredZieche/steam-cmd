@@ -15,9 +15,9 @@ mkdir galaxies
 #create galaxy #
 ./server.sh --galaxy-name noobgalaxy --admin {{ admin# }} --datapath ./galaxies
 /save
-/stop 
-# start server # 
-./server.sh --galaxy-name noobgalaxy --admin {{ admin# }} --datapath ./galaxies/ 
+/stop
+# start server #
+./server.sh --galaxy-name noobgalaxy --admin {{ admin# }} --datapath ./galaxies/
 
 # Ports #
 27000 - UDP & TCP
