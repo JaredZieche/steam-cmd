@@ -1,3 +1,9 @@
 ---
-firewalld:
+- name: add firewall rules
+    firewalld:
+
+- name: template {{ steam_appid }} service files
+
+- name: set admin list
+
 

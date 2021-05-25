@@ -2,7 +2,7 @@
 resource "aws_vpc" "default" {
     cidr_block = "${var.cidr_block_main}"
     enable_dns_hostnames = true
-tags {
+    tags = {
         Name = "${var.vpc_name}"
     }
 }
@@ -13,7 +13,7 @@ resource "aws_subnet" "subnet_for_db" {
     cidr_block = "${var.cidr_block_for_db}"
     availability_zone = "${var.default_AZ}"
     map_public_ip_on_launch = true
-tags {
+    tags = {
         Name = "Subnet_For_Databases"
     }
 }
@@ -23,7 +23,7 @@ resource "aws_subnet" "subnet_for_app" {
     cidr_block = "${var.cidr_block_for_app}"
     availability_zone = "${var.default_AZ}"
     map_public_ip_on_launch = true
-tags {
+    tags = {
         Name = "Subnet_For_Applications"
     }
 }
@@ -33,7 +33,7 @@ resource "aws_subnet" "subnet_for_lb" {
     cidr_block = "${var.cidr_block_for_lb}"
     availability_zone = "${var.default_AZ}"
     map_public_ip_on_launch = true
-tags {
+    tags = {
         Name = "Subnet_For_LoadBalancers"
     }
 }
@@ -43,14 +43,14 @@ resource "aws_subnet" "subnet_for_bhost" {
     cidr_block = "${var.cidr_block_for_bhost}"
     availability_zone = "${var.default_AZ}"
     map_public_ip_on_launch = true
-tags {
+    tags = {
         Name = "Subnet_For_BastionHost"
     }
 }
 # Enable internet access
 resource "aws_internet_gateway" "gw" {
     vpc_id = "${aws_vpc.default.id}"
-tags {
+    tags = {
         Name = "${var.vpc_name}_ig"
     }
 }
@@ -61,9 +61,9 @@ route {
     cidr_block = "0.0.0.0/0"
     gateway_id = "${aws_internet_gateway.gw.id}"
   }
-tags {
-    Name = "aws_route_table"
-  }
+    tags = {
+      Name = "aws_route_table"
+    }
 }
 ##
 ## Add routes to networks

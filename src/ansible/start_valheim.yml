@@ -1,0 +1,8 @@
+- name: operate valheim service
+  hosts: all
+  tasks:
+    - name: "{{ state }} valheim service"
+      service:
+        name: valheim
+        state: "{{ state }}"
+      become: true

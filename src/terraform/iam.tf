@@ -1,3 +1,20 @@
+resource "aws_iam_role" "steam_cmd_role" {
+  name = "steam_cmd_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "sts:AssumeRole"
+        Effect = "Allow"
+        Sid    = "steamCmdRole"
+        Principal = {
+          Service = "ec2.amazonaws.com"
+        }
+      },
+    ]
+  })
+}
 # steam s3 access policy for backup bucket
 resource "aws_iam_role_policy" "steam_access_policy" {
   name = "steam_s3_policy"
@@ -14,24 +31,6 @@ resource "aws_iam_role_policy" "steam_access_policy" {
         ]
         Effect   = "Allow"
         Resource = "arn:aws:s3:::steamcmd*"
-      },
-    ]
-  })
-}
-
-resource "aws_iam_role" "steam_cmd_role" {
-  name = "steam_cmd_role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = "${aws_iam_role_policy.steam_access_policy.id}"
-        Principal = {
-          Service = "ec2.amazonaws.com"
-        }
       },
     ]
   })
@@ -67,6 +66,7 @@ resource "aws_iam_policy" "enforce_mfa" {
                     "aws:MultiFactorAuthPresent": "false"
                 }
             }
-      }
+      },
+    ]
   })
 }

@@ -1,4 +1,6 @@
-provider "aws" {
-    profile = "default"
-    region  = "${var.aws_region}"
+data "terraform_remote_state" "us-east-2-global" {
+  backend = "local"
+  config = {
+    path = ".terraform/terraform.tfstate"
+  }
 }
