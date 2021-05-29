@@ -1,6 +1,13 @@
 ---
 - name: add firewall rules
-    firewalld:
+  firewalld:
+    permanent: "{{ item.permanent | default(true) }}"
+    port: "{{ item.port }}"
+    state: "{{ item.state | default('enabled') }}"
+    zone: "{{ item.zone | default('public') }}"
+  loop: "{{ firewall_ports }}"
+  notify: "firewalld reload"
+  tags: firewalld
 
 - name: template {{ steam_appid }} service files
 

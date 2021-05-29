@@ -1,8 +1,28 @@
 - name: operate valheim service
+  hosts: localhost
+  tasks:
+    - name: "Waiting for {{ instance_id }} to reach {{ ec2_state }} state"
+      ec2_instance:
+        state: "{{ ec2_state }}"
+        instance_ids: "{{ instance_id }}"
+      register: ec2_start
+
+    - name: "Wait for {{ ec2_start | json_query('instances[0].public_ip_address') }} to become available"
+      wait_for:
+        state: started
+        sleep: 1
+        timeout: 300
+        port: 22
+        host: "{{ ec2_start | json_query('instances[0].public_ip_address') }}"
+
+    - name: "refresh the inventory"
+      meta: refresh_inventory
+
+- name: operate valheim service
   hosts: all
   tasks:
-    - name: "{{ state }} valheim service"
+    - name: "Set {{ system_service }} to {{ service_state }}"
       service:
-        name: valheim
-        state: "{{ state }}"
+        name: "{{ system_service }}"
+        state: "{{ system_service_state }}"
       become: true
