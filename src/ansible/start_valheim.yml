@@ -1,4 +1,4 @@
-- name: operate valheim service
+- name: Start steamcmd instance
   hosts: localhost
   tasks:
     - name: "Waiting for {{ instance_id }} to reach {{ ec2_state }} state"
@@ -18,7 +18,7 @@
     - name: "refresh the inventory"
       meta: refresh_inventory
 
-- name: operate valheim service
+- name: "operate {{ system_service }} service"
   hosts: all
   tasks:
     - name: "Set {{ system_service }} to {{ service_state }}"
