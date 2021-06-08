@@ -1,0 +1,4 @@
+- name: "install required packages"
+  yum:
+    name: "{{ steam_cmd_packages }}"
+    version: latest

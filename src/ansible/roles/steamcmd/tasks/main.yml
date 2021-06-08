@@ -9,7 +9,31 @@
   notify: "firewalld reload"
   tags: firewalld
 
-- name: template {{ steam_appid }} service files
+- name: "template {{ appid }} service files"
+
+- name: "Install steamdcmd {{ ansible_os_family }} pre-reqs"
+  include_tasks:
+    file: "packages/{{ ansible_os_family }}"
+
+- name: "{{ steam_user }} block"
+  block:
+    - name: mk steam game dir
+      file:
+        state: directory
+        path: "Steam"
+
+    - name: get steam installer
+      get_url:
+        url: "{{ steam_cmd_archive_url }}"
+        dest: "{{ lookup('env', 'HOME' }}"
+
+    - name: "unarachive steam artifact"
+      unarchive:
+    - name: install apps
+      include_tasks:
+        file: "{{ app_name }}.yml"
+  become: true
+  become_user: "{{ steam_user }}"
 
 - name: set admin list
 

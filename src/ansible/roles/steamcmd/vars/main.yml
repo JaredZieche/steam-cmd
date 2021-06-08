@@ -2,3 +2,8 @@
 # vars file for steamcmd
 steam_user: steam
 steam_cmd_bucket: steamcmd
+steam_cmd_packages:
+  - glibc.i686
+  - libstdc++.i868
+steam_cmd_archive_url: "http://media.steampowered.com/installer/steamcmd_linux.tar.gz"
+steam_cmd_command: "./steamcmd.sh +login anonymous +force_install_dir ./{{ app_name }}/ +app_update {{ app_id }} validate + exit"
