@@ -1,0 +1,41 @@
+- name: "operate {{ system_service }} service"
+  hosts: all
+  tasks:
+    - name: "Set {{ system_service }} to {{ service_state }}"
+      service:
+        name: "{{ system_service }}"
+        state: "{{ system_service_state }}"
+      become: true
+
+    - name: "find {{ system_service }} files"
+      find:
+        file_type: file
+        paths: "{{ game_dir }}"
+        patterns: "{{ game_files_regex }}"
+      register: game_files
+
+    - name: "backup {{ system_service }} game files to s3"
+      aws_s3:
+        bucket: "{{ steam_cmd_bucket }}"
+        prefix: "{{ app_name }}/"
+        mode: put
+        src: "{{ item.path }}"
+      regsiter: backup
+      loop: "{{ game_files.files[] }}"
+
+- name: Stop steamcmd instance
+  hosts: localhost
+  tasks:
+    - name: "Waiting for {{ instance_id }} to reach {{ ec2_state }} state"
+      ec2_instance:
+        state: "{{ ec2_state }}"
+        instance_ids: "{{ instance_id }}"
+      register: ec2_start
+
+    - name: "Wait for {{ ec2_start | json_query('instances[0].public_ip_address') }} to be {{ ec2_state }}"
+      wait_for:
+        state: started
+        sleep: 1
+        timeout: 300
+        port: 22
+        host: "{{ ec2_start | json_query('instances[0].public_ip_address') }}"

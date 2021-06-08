@@ -1,0 +1,7 @@
+system_service: valheim
+app_name: valheim
+app_id: "892970"
+game_files_regex:
+  - '*.db'
+  - '*.fwl'
+game_dir: ".config/unity3d/IronGate/Valheim/worlds"

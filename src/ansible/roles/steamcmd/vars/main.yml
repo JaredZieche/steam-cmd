@@ -1,2 +1,4 @@
 ---
 # vars file for steamcmd
+steam_user: steam
+steam_cmd_bucket: steamcmd
