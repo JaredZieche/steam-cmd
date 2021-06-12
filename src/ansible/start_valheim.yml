@@ -1,5 +1,7 @@
 - name: Start steamcmd instance
   hosts: localhost
+  vars:
+    ec2_state: running
   tasks:
     - name: "Waiting for {{ instance_id }} to reach {{ ec2_state }} state"
       ec2_instance:
@@ -20,8 +22,11 @@
 
 - name: "operate {{ system_service }} service"
   hosts: all
+  vars:
+    system_service: valheim
+    system_service_state: started
   tasks:
-    - name: "Set {{ system_service }} to {{ service_state }}"
+    - name: "Set {{ system_service }} to {{ system_service_state }}"
       service:
         name: "{{ system_service }}"
         state: "{{ system_service_state }}"
